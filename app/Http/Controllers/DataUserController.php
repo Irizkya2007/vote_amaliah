@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Role;
+use App\Models\School; // Import School model
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,12 +14,13 @@ class DataUserController extends Controller
     // Show the users list
     public function index()
     {
-        // Fetch users with their related kelas and role
-        $users = User::with(['kelas', 'role'])->get();
+        // Fetch users with their related kelas, role, and school
+        $users = User::with(['kelas', 'role', 'school'])->get();
         $kelas = Kelas::all();  // Fetch all classes for the dropdown
         $roles = Role::all();   // Fetch all roles for the dropdown
+        $schools = School::all(); // Fetch all schools for the dropdown
 
-        return view('admin.datauser.index', compact('users', 'kelas', 'roles'));
+        return view('admin.datauser.index', compact('users', 'kelas', 'roles', 'schools'));
     }
 
     // Update a specific user
@@ -28,11 +30,12 @@ class DataUserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $id,
-            'nisn' => 'nullable|numeric|unique:users,nisn,' . $id,
-            'nis' => 'nullable|numeric|unique:users,nis,' . $id,
-            'nip' => 'nullable|numeric|unique:users,nip,' . $id,
+            'nisn' => 'nullable|string|unique:users,nisn,' . $id,
+            'nis' => 'nullable|string|unique:users,nis,' . $id,
+            'nip' => 'nullable|string|unique:users,nip,' . $id,
             'kelas_id' => 'nullable|exists:kelas,id',
             'role_id' => 'required|exists:roles,id',
+            'school_id' => 'required|exists:schools,id', // Validasi untuk school_id
         ]);
 
         // Find the user by id
@@ -46,6 +49,7 @@ class DataUserController extends Controller
         $user->nip = $request->nip;
         $user->kelas_id = $request->kelas_id;
         $user->role_id = $request->role_id;
+        $user->school_id = $request->school_id; // Update school_id
 
         // Check if password is being updated
         if ($request->filled('password')) {
@@ -68,6 +72,7 @@ class DataUserController extends Controller
         return redirect()->route('datauser.index')->with('success', 'User deleted successfully.');
     }
 
+    // Store a new user
     public function store(Request $request)
     {
         // Determine the user type
@@ -77,16 +82,18 @@ class DataUserController extends Controller
         if ($userType === 'siswa') {
             $request->validate([
                 'name' => 'required|string|max:255',
-                'nisn' => 'required|numeric|unique:users',
-                'nis' => 'required|numeric|unique:users',
+                'nisn' => 'required|string|unique:users',
+                'nis' => 'required|string|unique:users',
                 'kelas_id' => 'required|exists:kelas,id',
                 'role_id' => 'required|exists:roles,id',
+                'school_id' => 'required|exists:schools,id', // Validasi untuk school_id
             ]);
         } else {
             $request->validate([
                 'name' => 'required|string|max:255',
-                'nip' => 'required|numeric|unique:users',
+                'nip' => 'required|string|unique:users',
                 'role_id' => 'required|exists:roles,id',
+                'school_id' => 'required|exists:schools,id', // Validasi untuk school_id
             ]);
         }
 
@@ -94,6 +101,7 @@ class DataUserController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->role_id = $request->role_id;
+        $user->school_id = $request->school_id; // Set school_id
 
         // Handle Siswa data
         if ($userType === 'siswa') {

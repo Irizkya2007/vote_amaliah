@@ -51,5 +51,9 @@ class Candidate extends Model
     {
         return $this->votes()->count();
     }
-}
 
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+}

@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('username')->unique();
             $table->string('password');
-            $table->bigInteger('nisn')->unique()->nullable(); // Optional for 'siswa'
-            $table->bigInteger('nis')->unique()->nullable();  // Optional for 'siswa'
-            $table->bigInteger('nip')->unique()->nullable();  // Optional for 'guru' or 'pegawai'
+            $table->string('nisn')->unique()->nullable(); // Optional for 'siswa'
+            $table->string('nis')->unique()->nullable();  // Optional for 'siswa'
+            $table->string('nip')->unique()->nullable();  // Optional for 'guru' or 'pegawai'
             $table->timestamps();
             $table->foreignId('kelas_id')->nullable()->constrained('kelas')->onDelete('set null'); // Relasi ke tabel kelas
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade'); // Relasi ke tabel roles
+            $table->foreignId('school_id')->constrained('schools')->onDelete('cascade'); // Asosiasi kandidat dengan sekolah
         });
     }
 

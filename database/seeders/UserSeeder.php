@@ -53,6 +53,7 @@ class UserSeeder extends Seeder
                 'nis' => $item[1], // NIS
                 'kelas_id' => 1, // Misalnya, kelas_id = 1
                 'role_id' => 1,  // Misalnya, role_id = 1 untuk siswa
+                'school_id' => 1,
             ]);
         }
     }

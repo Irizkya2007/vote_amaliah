@@ -77,4 +77,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Vote::class);
     }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
 }

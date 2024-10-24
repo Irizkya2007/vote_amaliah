@@ -41,6 +41,7 @@
                                         <th>NIS</th>
                                         <th>Kelas</th>
                                         <th>Role</th>
+                                        <th>Sekolah</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -54,6 +55,7 @@
                                         <td>{{ $user->nis ?? '-' }}</td>
                                         <td>{{ $user->kelas ? $user->kelas->nama_kelas : '-' }}</td>
                                         <td>{{ $user->role->name }}</td>
+                                        <td>{{ $user->school->name }}</td>
                                         <td>
                                             <!-- Edit Button -->
                                             <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editUserModal-{{ $user->id }}">Edit</button>

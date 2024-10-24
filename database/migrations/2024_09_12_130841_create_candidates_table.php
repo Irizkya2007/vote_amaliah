@@ -13,16 +13,17 @@ class CreateCandidatesTable extends Migration
     {
         Schema::create('candidates', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Nama gabungan kandidat (opsional)
+            $table->string('name'); // Nama kandidat gabungan (opsional)
             $table->foreignId('ketua_id')->constrained('users')->onDelete('cascade'); // Ketua dari tabel users
             $table->foreignId('wakil_id')->nullable()->constrained('users')->onDelete('cascade'); // Wakil dari tabel users
             $table->text('visi');
             $table->text('misi');
-            $table->string('image')->nullable(); // Kolom untuk menyimpan path/URL gambar kandidat
+            $table->string('ketua_image')->nullable(); // Gambar ketua
+            $table->string('wakil_image')->nullable(); // Gambar wakil
+            $table->foreignId('school_id')->constrained('schools')->onDelete('cascade'); // Asosiasi kandidat dengan sekolah
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -30,5 +31,4 @@ class CreateCandidatesTable extends Migration
     {
         Schema::dropIfExists('candidates');
     }
-}   
-
+}
