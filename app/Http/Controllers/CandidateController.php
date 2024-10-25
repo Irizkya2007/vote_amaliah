@@ -19,17 +19,18 @@ class CandidateController extends Controller
         $candidatesSchool1 = Candidate::with(['ketua', 'wakil', 'school'])
             ->where('school_id', 1)
             ->get();
-    
+
         $candidatesSchool2 = Candidate::with(['ketua', 'wakil', 'school'])
             ->where('school_id', 2)
             ->get();
-    
+
         // Ambil semua pengguna untuk keperluan dropdown
         $users = User::all();
-    
-        return view('admin.candidate.index', compact('candidatesSchool1', 'candidatesSchool2', 'users'));
+        $schools = School::all();
+
+        return view('admin.candidate.index', compact('candidatesSchool1', 'candidatesSchool2', 'users', 'schools'));
     }
-    
+
 
     /**
      * Show the form for creating a new candidate.
